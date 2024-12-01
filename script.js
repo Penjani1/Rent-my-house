@@ -9,7 +9,8 @@ const properties = [
         email: "isaackaila@gmail.com",
         price: "K1000",
         description: "A spacious house with 3 bedrooms, garden, and parking.",
-        images: ["Images/cool.jpeg", "Images/kitchen.webp", "Images/living room.jpg"],
+        listingImages: ["Images/cool.jpeg"],
+        detailsImages: ["Images/kitchen.webp", "Images/living room.jpg"],
     },
     {
         location: "Chawama",
@@ -18,7 +19,8 @@ const properties = [
         email: "boysonkaira@gmail.com",
         price: "K900",
         description: "A cozy home with 2 bedrooms near schools and shops.",
-        images: ["Images/rent.jpeg", "Images/kitchen.webp", "Images/living room.jpg"],
+        listingImages: ["Images/rent.jpeg"],
+        detailsImages: ["Images/kitchen.webp", "Images/living room.jpg"],
     },
     {
         location: "Garden house",
@@ -27,7 +29,8 @@ const properties = [
         email: "adessmusonda@gmail.com",
         price: "K1500",
         description: "A spacious house with 3 bedrooms, garden, and parking.",
-        images: ["Images/place.jpg", "Images/kitchen.webp", "Images/living.jpg"],
+        listingImages: ["Images/place.jpg"],
+        detailsImages: ["Images/kitchen.webp", "Images/living room.jpg"],
     },
     {
         location: "Lilayi",
@@ -36,25 +39,28 @@ const properties = [
         email: "berthakaira@gmail.com",
         price: "K900",
         description: "A cozy home with 2 bedrooms near schools and shops.",
-        images: ["Images/big house.webp", "Images/kitchen.webp", "Images/living.jpg"],
+        listingImages: ["Images/big house.webp"],
+        detailsImages: ["Images/kitchen.webp", "Images/living room.jpg"],
     },
 ];
 
-function showHouseDetails(location, ownerName, phone, email, description, images) {
-    selectedProperty = { location, ownerName, phone, email, images };
+/// Function to show house details
+function showHouseDetails(location, ownerName, phone, email, description, listingImages, detailsImages) {
+    selectedProperty = { location, ownerName, phone, email, listingImages, detailsImages };
     currentImageIndex = 0;
     document.getElementById("house-description").textContent = description;
     updateImage();
     document.getElementById("house-details-modal").style.display = "block";
 }
 
+// Function to update the displayed image
 function updateImage() {
-    const currentImage = selectedProperty.images[currentImageIndex];
+    const currentImage = selectedProperty.detailsImages[currentImageIndex];
     document.getElementById("current-house-image").src = currentImage;
 }
 
 function nextImage() {
-    if (currentImageIndex < selectedProperty.images.length - 1) {
+    if (currentImageIndex < selectedProperty.detailsImages.length - 1) {
         currentImageIndex++;
         updateImage();
     }
@@ -67,40 +73,34 @@ function prevImage() {
     }
 }
 
+// Function to show payment modal
 function showPaymentModal() {
-    if (!selectedProperty) {
-        alert("No property selected!");
-        return;
-    }
     closeModal("house-details-modal");
     document.getElementById("payment-modal").style.display = "block";
 }
 
+// Function to process payment
 function processPayment() {
     alert("Payment Successful!");
     closeModal("payment-modal");
     showOwnerDetails();
 }
 
+// Function to show owner details
 function showOwnerDetails() {
-    if (!selectedProperty) {
-        alert("No property selected!");
-        return;
-    }
-
     document.getElementById("modal-location").textContent = selectedProperty.location;
     document.getElementById("modal-owner").textContent = selectedProperty.ownerName;
     document.getElementById("modal-phone").textContent = selectedProperty.phone;
     document.getElementById("modal-email").textContent = selectedProperty.email;
-
     document.getElementById("owner-modal").style.display = "block";
 }
 
+// Function to close modals
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
 }
 
-// Search functionality
+// Function to search properties based on user input
 function searchProperties() {
     const query = document.getElementById("search-bar").value.toLowerCase();
     const propertyList = document.getElementById("property-list");
@@ -119,7 +119,7 @@ function searchProperties() {
             const propertyDiv = document.createElement("div");
             propertyDiv.className = "property";
             propertyDiv.innerHTML = `
-                <img src="${p.images[0]}" alt="House for rent">
+                <img src="${p.listingImages[0]}" alt="House for rent">
                 <div class="property-details">
                     <p><strong>Location:</strong> ${p.location}</p>
                     <p><strong>Price:</strong> ${p.price} per month</p>
@@ -132,7 +132,8 @@ function searchProperties() {
                     p.phone,
                     p.email,
                     p.description,
-                    p.images
+                    p.listingImages,
+                    p.detailsImages
                 );
             propertyList.appendChild(propertyDiv);
         });
@@ -141,6 +142,7 @@ function searchProperties() {
     }
 }
 
+// Form submission event to handle the house posting
 document.getElementById("post-house-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -151,17 +153,21 @@ document.getElementById("post-house-form").addEventListener("submit", function (
     const price = document.getElementById("price").value;
     const description = document.getElementById("description").value;
 
-    // Get selected images from the file input
-    const imagesInput = document.getElementById("images");
-    const files = imagesInput.files;
-    const images = [];
+    const listingImagesInput = document.getElementById("listing-images");
+    const detailsImagesInput = document.getElementById("details-images");
 
-    // Read the images as data URLs
-    for (let i = 0; i < files.length; i++) {
+    const listingFiles = listingImagesInput.files;
+    const detailsFiles = detailsImagesInput.files;
+
+    const listingImages = [];
+    const detailsImages = [];
+
+    // Read listing images
+    for (let i = 0; i < listingFiles.length; i++) {
         const reader = new FileReader();
         reader.onloadend = function () {
-            images.push(reader.result); // Add base64 string to images array
-            if (images.length === files.length) {
+            listingImages.push(reader.result);
+            if (listingImages.length === listingFiles.length && detailsImages.length === detailsFiles.length) {
                 const newProperty = {
                     location,
                     ownerName,
@@ -169,20 +175,47 @@ document.getElementById("post-house-form").addEventListener("submit", function (
                     email,
                     price: `K${price}`,
                     description,
-                    images,
+                    listingImages,
+                    detailsImages,
                 };
 
                 properties.push(newProperty);
                 document.getElementById("post-house-form").reset();
                 searchProperties();
-
                 alert("Your house has been posted!");
             }
         };
-        reader.readAsDataURL(files[i]); // Convert the image to base64 string
+        reader.readAsDataURL(listingFiles[i]);
+    }
+
+    // Read house details images
+    for (let i = 0; i < detailsFiles.length; i++) {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            detailsImages.push(reader.result);
+            if (listingImages.length === listingFiles.length && detailsImages.length === detailsFiles.length) {
+                const newProperty = {
+                    location,
+                    ownerName,
+                    phone,
+                    email,
+                    price: `K${price}`,
+                    description,
+                    listingImages,
+                    detailsImages,
+                };
+
+                properties.push(newProperty);
+                document.getElementById("post-house-form").reset();
+                searchProperties();
+                alert("Your house has been posted!");
+            }
+        };
+        reader.readAsDataURL(detailsFiles[i]);
     }
 });
 
+// Initialize properties
 function initializeProperties() {
     searchProperties();
 }
