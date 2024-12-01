@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent My House</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact us">Contact Us</a>
+            <a href="Post.html">Post</a> 
+            <input
+                type="text"
+                id="search-bar"
+                placeholder="Search properties..."  
+                oninput="searchProperties()"
+            />
+        </div>
+    </nav>
+
+    <!-- House Details Modal -->
+    <div id="house-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('house-details-modal')">&times;</span>
+            <h2>House Details</h2>
+            <div id="house-image-container">
+                <button class="nav-arrow" onclick="prevImage()">&#10094;</button>
+                <img id="current-house-image" src="" alt="House Image">
+                <button class="nav-arrow" onclick="nextImage()">&#10095;</button>
+            </div>
+            <p id="house-description"></p>
+            <button onclick="showPaymentModal()">View Owner Details</button>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('payment-modal')">&times;</span>
+            <h2>Payment Required</h2>
+            <p>You need to pay K50 to access the owner's details for this property.</p>
+            <button onclick="processPayment()">Pay Now</button>
+        </div>
+    </div>
+
+    <!-- Owner Details Modal -->
+    <div id="owner-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('owner-modal')">&times;</span>
+            <h2>Owner Details</h2>
+            <p><strong>Location:</strong> <span id="modal-location"></span></p>
+            <p><strong>Owner Name:</strong> <span id="modal-owner"></span></p>
+            <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
+            <p><strong>Email:</strong> <span id="modal-email"></span></p>
+            <div class="modal-actions">
+                <a id="call-owner" href="#" class="action-button call-button">Call</a>
+                <a id="text-owner" href="#" class="action-button text-button">Text</a>
+            </div>
+        </div>
+    </div>
+
+    <header id="home">
+        <div class="header-content">
+            <img src="Images/Penjani.webp" alt="My Logo" class="logo">
+            <h1>Rent My House</h1>
+            <p>Your dream home is just a click away!</p>
+        </div>
+    </header>
+
+    <main id="content">
+        <section>
+            <h2>Featured Properties</h2>
+            <div id="property-list"></div>
+            <p id="no-results" class="hidden">Result Not Found</p>
+        </section>
+
+
+        <!-- Landlord Post Section -->
+        <section id="post-house-section">
+            <h2>Post Your House for Rent</h2>
+            <form id="post-house-form">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" placeholder="Enter location" required>
+                </div>
+                <div class="form-group">
+                    <label for="owner-name">Owner Name:</label>
+                    <input type="text" id="owner-name" name="owner-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price (per month):</label>
+                    <input type="text" id="price" name="price" placeholder="Enter price" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" placeholder="Enter house description" required></textarea>
+                </div>
+                <div class="form-group">
+                <label for="images">Images (Select images from your local drive):</label>
+                <input type="file" id="images" name="images" accept="image/*" multiple required>
+            </div>
+                <button type="submit" class="submit-button">Post House</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Rent My House. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
