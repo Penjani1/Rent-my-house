@@ -1,6 +1,7 @@
 let selectedProperty = null;
 let currentImageIndex = 0;
 
+// Property data (example properties)
 const properties = [
     {
         location: "Twin Park",
@@ -14,7 +15,7 @@ const properties = [
     },
     {
         location: "Chawama",
-        ownerName: "Evans kaira",
+        ownerName: "Evans Kaira",
         phone: "+260 973638653",
         email: "boysonkaira@gmail.com",
         price: "K900",
@@ -23,7 +24,7 @@ const properties = [
         detailsImages: ["Images/kitchen.webp", "Images/living room.jpg"],
     },
     {
-        location: "Garden house",
+        location: "Garden House",
         ownerName: "Adess Musonda",
         phone: "+260 779287128",
         email: "adessmusonda@gmail.com",
@@ -44,7 +45,7 @@ const properties = [
     },
 ];
 
-/// Function to show house details
+// Function to show house details in a modal
 function showHouseDetails(location, ownerName, phone, email, description, listingImages, detailsImages) {
     selectedProperty = { location, ownerName, phone, email, listingImages, detailsImages };
     currentImageIndex = 0;
@@ -53,7 +54,7 @@ function showHouseDetails(location, ownerName, phone, email, description, listin
     document.getElementById("house-details-modal").style.display = "block";
 }
 
-// Function to update the displayed image
+// Function to update the displayed image in the modal
 function updateImage() {
     const currentImage = selectedProperty.detailsImages[currentImageIndex];
     document.getElementById("current-house-image").src = currentImage;
@@ -73,20 +74,20 @@ function prevImage() {
     }
 }
 
-// Function to show payment modal
+// Function to show the payment modal
 function showPaymentModal() {
     closeModal("house-details-modal");
     document.getElementById("payment-modal").style.display = "block";
 }
 
-// Function to process payment
+// Function to process payment and display owner details
 function processPayment() {
     alert("Payment Successful!");
     closeModal("payment-modal");
     showOwnerDetails();
 }
 
-// Function to show owner details
+// Function to show owner details in a modal
 function showOwnerDetails() {
     document.getElementById("modal-location").textContent = selectedProperty.location;
     document.getElementById("modal-owner").textContent = selectedProperty.ownerName;
@@ -95,24 +96,45 @@ function showOwnerDetails() {
     document.getElementById("owner-modal").style.display = "block";
 }
 
-// Function to close modals
+// Function to close any modal
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
 }
 
-// Function to search properties based on user input
-function searchProperties() {
+// Function to filter and sort properties based on user input
+function applyFilters() {
     const query = document.getElementById("search-bar").value.toLowerCase();
+    const minPrice = parseInt(document.getElementById("min-price").value) || 0;
+    const maxPrice = parseInt(document.getElementById("max-price").value) || Infinity;
+    const bedrooms = document.getElementById("bedrooms").value;
+    const locationFilter = document.getElementById("location-filter").value.toLowerCase();
+    const sortBy = document.getElementById("sort-by").value;
+
     const propertyList = document.getElementById("property-list");
     const noResultsMessage = document.getElementById("no-results");
 
-    propertyList.innerHTML = "";
-    const filteredProperties = properties.filter(
-        (p) =>
-            p.location.toLowerCase().includes(query) ||
-            p.description.toLowerCase().includes(query)
-    );
+    propertyList.innerHTML = ""; // Clear current list
 
+    // Apply filters to properties
+    let filteredProperties = properties.filter((p) => {
+        const price = parseInt(p.price.replace("K", ""));
+        const bedroomsMatch = p.description.match(/\d+/); // Extract bedrooms from description
+        const matchesQuery = query === "" || p.location.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+        const matchesPrice = price >= minPrice && price <= maxPrice;
+        const matchesBedrooms = bedrooms === "" || (bedroomsMatch && parseInt(bedroomsMatch[0]) === parseInt(bedrooms));
+        const matchesLocation = locationFilter === "" || p.location.toLowerCase().includes(locationFilter);
+
+        return matchesQuery && matchesPrice && matchesBedrooms && matchesLocation;
+    });
+
+    // Sort properties based on selection
+    if (sortBy === "price-asc") {
+        filteredProperties.sort((a, b) => parseInt(a.price.replace("K", "")) - parseInt(b.price.replace("K", "")));
+    } else if (sortBy === "price-desc") {
+        filteredProperties.sort((a, b) => parseInt(b.price.replace("K", "")) - parseInt(a.price.replace("K", "")));
+    }
+
+    // Display the filtered and sorted properties
     if (filteredProperties.length > 0) {
         noResultsMessage.classList.add("hidden");
         filteredProperties.forEach((p) => {
@@ -138,11 +160,12 @@ function searchProperties() {
             propertyList.appendChild(propertyDiv);
         });
     } else {
+        // Show "No results found" message
         noResultsMessage.classList.remove("hidden");
     }
 }
 
-// Form submission event to handle the house posting
+// Form submission to handle posting a new house
 document.getElementById("post-house-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -181,7 +204,7 @@ document.getElementById("post-house-form").addEventListener("submit", function (
 
                 properties.push(newProperty);
                 document.getElementById("post-house-form").reset();
-                searchProperties();
+                applyFilters();
                 alert("Your house has been posted!");
             }
         };
@@ -207,7 +230,7 @@ document.getElementById("post-house-form").addEventListener("submit", function (
 
                 properties.push(newProperty);
                 document.getElementById("post-house-form").reset();
-                searchProperties();
+                applyFilters();
                 alert("Your house has been posted!");
             }
         };
@@ -215,9 +238,9 @@ document.getElementById("post-house-form").addEventListener("submit", function (
     }
 });
 
-// Initialize properties
+// Initialize properties on page load
 function initializeProperties() {
-    searchProperties();
+    applyFilters();
 }
 
 initializeProperties();

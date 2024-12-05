@@ -162,19 +162,18 @@ nav {
 .modal button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #394b5e; /* Blue background */
+    background-color: #394b5e;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 16px; /* Adjust button font size */
+    font-size: 16px;
 }
 
 .modal button:hover {
-    background-color: #0056b3; /* Darker blue for hover */
+    background-color: #0056b3;
 }
-
 
 .modal-actions {
     margin-top: 20px;
@@ -283,4 +282,104 @@ footer {
     position: relative;
     bottom: 0;
     width: 100%;
+}
+
+/* Authentication Form Styles */
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.auth-button {
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #0056b3;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+p a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+/* Filter and Sort Section */
+#filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#filter-container label {
+    margin-right: 5px;
+    font-weight: bold;
+}
+#filter-container input,
+#filter-container select,
+#filter-container button {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+#filter-container input {
+    max-width: 100px;
+}
+#filter-container button {
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    padding: 5px 10px;
+}
+#filter-container button:hover {
+    background-color: #0056b3;
 }

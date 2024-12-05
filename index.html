@@ -13,55 +13,15 @@
             <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#content">Content</a>
+            <a href="Login.html">Login</a>
             <input
                 type="text"
                 id="search-bar"
                 placeholder="Search properties..."
-                oninput="searchProperties()"
+                oninput="applyFilters()"
             />
         </div>
     </nav>
-
-    <!-- House Details Modal -->
-    <div id="house-details-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('house-details-modal')">&times;</span>
-            <h2>House Details</h2>
-            <div id="house-image-container">
-                <button class="nav-arrow" onclick="prevImage()">&#10094;</button>
-                <img id="current-house-image" src="" alt="House Image">
-                <button class="nav-arrow" onclick="nextImage()">&#10095;</button>
-            </div>
-            <p id="house-description"></p>
-            <button onclick="showPaymentModal()">View Owner Details</button>
-        </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div id="payment-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('payment-modal')">&times;</span>
-            <h2>Payment Required</h2>
-            <p>You need to pay K50 to access the owner's details for this property.</p>
-            <button onclick="processPayment()">Pay Now</button>
-        </div>
-    </div>
-
-    <!-- Owner Details Modal -->
-    <div id="owner-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('owner-modal')">&times;</span>
-            <h2>Owner Details</h2>
-            <p><strong>Location:</strong> <span id="modal-location"></span></p>
-            <p><strong>Owner Name:</strong> <span id="modal-owner"></span></p>
-            <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
-            <p><strong>Email:</strong> <span id="modal-email"></span></p>
-            <div class="modal-actions">
-                <a id="call-owner" href="#" class="action-button call-button">Call</a>
-                <a id="text-owner" href="#" class="action-button text-button">Text</a>
-            </div>
-        </div>
-    </div>
 
     <header id="home">
         <div class="header-content">
@@ -72,52 +32,81 @@
     </header>
 
     <main id="content">
-        <!-- Featured Properties -->
+        <!-- Filter and Sort Section -->
+        <div id="filter-container">
+            <label for="min-price">Min Price:</label>
+            <input type="number" id="min-price" placeholder="e.g., 500">
+
+            <label for="max-price">Max Price:</label>
+            <input type="number" id="max-price" placeholder="e.g., 1500">
+
+            <label for="bedrooms">Bedrooms:</label>
+            <select id="bedrooms">
+                <option value="">Any</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+
+            <label for="location-filter">Location:</label>
+            <input type="text" id="location-filter" placeholder="e.g., Twin Park">
+
+            <label for="sort-by">Sort By:</label>
+            <select id="sort-by">
+                <option value="newest">Newest</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+            </select>
+
+            <button onclick="applyFilters()">Apply Filters</button>
+        </div>
+
+        <!-- Featured Properties Section -->
         <section>
             <h2>Featured Properties</h2>
             <div id="property-list"></div>
             <p id="no-results" class="hidden">Result Not Found</p>
         </section>
 
-        <!-- Landlord Post Section -->
-        <section id="post-house-section">
-            <h2>Post Your House for Rent</h2>
-            <form id="post-house-form">
-                <div class="form-group">
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" name="location" placeholder="Enter location" required>
+        <!-- House Details Modal -->
+        <div id="house-details-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('house-details-modal')">&times;</span>
+                <h2>House Details</h2>
+                <div id="house-image-container">
+                    <button class="nav-arrow" onclick="prevImage()">&#10094;</button>
+                    <img id="current-house-image" src="" alt="House Image">
+                    <button class="nav-arrow" onclick="nextImage()">&#10095;</button>
                 </div>
-                <div class="form-group">
-                    <label for="owner-name">Owner Name:</label>
-                    <input type="text" id="owner-name" name="owner-name" placeholder="Enter your name" required>
+                <p id="house-description"></p>
+                <button onclick="showPaymentModal()">View Owner Details</button>
+            </div>
+        </div>
+
+        <!-- Payment Modal -->
+        <div id="payment-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('payment-modal')">&times;</span>
+                <h2>Payment Required</h2>
+                <p>You need to pay K50 to access the owner's details for this property.</p>
+                <button onclick="processPayment()">Pay Now</button>
+            </div>
+        </div>
+
+        <!-- Owner Details Modal -->
+        <div id="owner-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('owner-modal')">&times;</span>
+                <h2>Owner Details</h2>
+                <p><strong>Location:</strong> <span id="modal-location"></span></p>
+                <p><strong>Owner Name:</strong> <span id="modal-owner"></span></p>
+                <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
+                <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                <div class="modal-actions">
+                    <a id="call-owner" href="#" class="action-button call-button">Call</a>
+                    <a id="text-owner" href="#" class="action-button text-button">Text</a>
                 </div>
-                <div class="form-group">
-                    <label for="phone">Phone:</label>
-                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="price">Price (per month):</label>
-                    <input type="text" id="price" name="price" placeholder="Enter price" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" placeholder="Enter house description" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="listing-images">Listing Images (Main image for the property):</label>
-                    <input type="file" id="listing-images" name="listing-images" accept="image/*" multiple required>
-                </div>
-                <div class="form-group">
-                    <label for="details-images">House Detail Images (Images for inside, garden, etc.):</label>
-                    <input type="file" id="details-images" name="details-images" accept="image/*" multiple required>
-                </div>
-                <button type="submit" class="submit-button">Post House</button>
-            </form>
-        </section>
+            </div>
+        </div>
     </main>
 
     <footer>
